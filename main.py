@@ -58,7 +58,7 @@ while running:
 
     if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied and g.hexagons[g.clicked_id].can_move:
         m.set_position(g.clicked_id, g)
-    elif g.clicked_id is not None and g.hexagons[g.clicked_id].occupied:
+    elif g.clicked_id is not None and g.hexagons[g.clicked_id].occupied and g.hexagons[g.clicked_id].id != current_mob.current_position:
         #check if attacked unit is bandit
         attack_from = g.hexagons[g.clicked_id].neighbours[g.neighbour_direction]
         m.set_position(attack_from, g)
