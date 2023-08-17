@@ -2,10 +2,11 @@ import constrains
 import pygame
 import time
 
+
 class Hexagon:
-    def __init__(self, origin, id):
+    def __init__(self, origin, hid):
         self.origin = origin
-        self.id = id
+        self.id = hid
         self.color = (61, 180, 50)
         self.fill_color = (100, 100, 250, 128)
         self.vertex = self.calculate_vertex()
@@ -21,9 +22,6 @@ class Hexagon:
             'bottom_right': None
         }
 
-        self.font = pygame.font.Font("assets/fonts/Roboto-Regular.ttf", 11)
-
-
     def set_neighbours(self, grid, row, col):
 
         if row % 2 == 0:
@@ -36,8 +34,6 @@ class Hexagon:
             if row != grid.height - 1:
                 self.neighbours['bottom_left'] = self.id + distance
                 self.neighbours['bottom_right'] = self.id + distance + 1
-
-
 
         else:
             distance = grid.width
@@ -54,9 +50,6 @@ class Hexagon:
 
         if col != distance - 1:
             self.neighbours['right'] = self.id + 1
-
-
-
 
     def calculate_vertex(self):
         vertex = []
@@ -102,12 +95,6 @@ class Hexagon:
             screen.blit(alpha_layer, (0, 0))
             alpha_layer.fill((0, 0, 0, 0))
 
-
-        text_surface = self.font.render(str(self.id), True, (255, 255, 255))
-        center = (self.origin[0] + constrains.HW / 2, self.origin[1] + constrains.HH / 2)
-        text_rect = text_surface.get_rect(center=center)
-        screen.blit(text_surface, text_rect)
-
         pygame.draw.polygon(screen, self.color, self.vertex, 1)
 
 
@@ -123,6 +110,7 @@ class Grid:
         self.over_id = None
         self.cursor_direction = None
         self.cursor_position = None
+        self.neighbour_direction = None
 
         current_id = 0
         current_py = 0
@@ -134,7 +122,6 @@ class Grid:
 
         initial_x_position = (constrains.WIDTH - total_grid_width) / 2
         initial_y_position = (constrains.HEIGHT - total_grid_height) / 2 + MAIN_Y_OFFSET
-
 
         for i in range(self.height):
 
@@ -202,5 +189,18 @@ class Grid:
             else:
                 self.cursor_position = 1
 
-
+            if self.cursor_direction == -1:
+                if self.cursor_position == 0:
+                    self.neighbour_direction = 'top_left'
+                elif self.cursor_position == 1:
+                    self.neighbour_direction = 'left'
+                else:
+                    self.neighbour_direction = 'bottom_left'
+            else:
+                if self.cursor_position == 0:
+                    self.neighbour_direction = 'top_right'
+                elif self.cursor_position == 1:
+                    self.neighbour_direction = 'right'
+                else:
+                    self.neighbour_direction = 'bottom_right'
 
