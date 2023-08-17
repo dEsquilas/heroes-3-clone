@@ -1,5 +1,6 @@
 import constrains
 import pygame
+import random
 
 
 class Mob(pygame.sprite.Sprite):
@@ -43,11 +44,11 @@ class Mob(pygame.sprite.Sprite):
         self.count_offset = (count_offset_x, count_offset_y)
 
         self.font = pygame.font.Font("assets/fonts/Roboto-Regular.ttf", 11)
-        self.count_surface = self.font.render(self.count, True, (255, 255, 255))
+        self.count_surface = self.font.render(str(self.count), True, (255, 255, 255))
         self.count_position = (count_offset_x + self.count_width / 2, count_offset_y + self.count_height / 2 - 1)
         self.count_rect = self.count_surface.get_rect(center=self.count_position)
 
-        self.update_count(10)
+        self.update_count()
 
         self.rect = self.image.get_rect()
 
@@ -59,12 +60,25 @@ class Mob(pygame.sprite.Sprite):
         self.speed = speed
         self.is_ranged = is_ranged
 
-    def update_count(self, number):
+    def attack(self):
+        current_dmg = random.randint(self.attack_min, self.attack_max) * self.count
+        return current_dmg
+
+    def recieve_damage(self, damage):
+        self.current_hp -= damage
+        if self.current_hp <= 0:
+            self.kill_unit()
+        self.count = self.current_hp // self.hp
+
+    def kill_unit(self):
+        self.kill()
+
+    def update_count(self):
         pygame.draw.rect(self.image, (80, 50, 190),
                          (self.count_offset[0], self.count_offset[1], self.count_width, self.count_height))
         pygame.draw.rect(self.image, (190, 165, 50),
                          (self.count_offset[0], self.count_offset[1], self.count_width, self.count_height), 1)
-        self.count_surface = self.font.render(str(number), True, (255, 255, 255))
+        self.count_surface = self.font.render(str(self.count), True, (255, 255, 255))
         self.count_rect = self.count_surface.get_rect(center=self.count_position)
         self.image.blit(self.count_surface, self.count_rect)
 
@@ -89,14 +103,17 @@ class Mob(pygame.sprite.Sprite):
 
         return x_position, y_position
 
+    def update(self):
+        self.update_count()
+
 
 class BlueDragon(Mob):
-    def __init__(self, direction=1):
-        super().__init__("assets/dragon.png", [43, 21, 90, 111], direction)
+    def __init__(self, count=1, direction=1):
+        super().__init__("assets/dragon.png", [43, 21, 90, 111], count, direction)
         self.set_mob_attr(40, 50, 250, 10, False)
 
 
 class Bandit(Mob):
-    def __init__(self, direction=1):
-        super().__init__("assets/bandit.png", [27, 32, 46, 97], direction)
+    def __init__(self, count=1, direction=1):
+        super().__init__("assets/bandit.png", [27, 32, 46, 97], count, direction)
         self.set_mob_attr(5, 5, 10, 10, 0)

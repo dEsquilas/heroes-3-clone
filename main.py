@@ -18,10 +18,10 @@ g = grid.Grid(14, 11)
 
 
 mobs_sprites_group = pygame.sprite.Group()
-m = mobs.BlueDragon()
+m = mobs.BlueDragon(5)
 m.set_position(0, g)
 mobs_sprites_group.add(m)
-b = mobs.Bandit(-1)
+b = mobs.Bandit(300, -1)
 b.set_position(12, g)
 mobs_sprites_group.add(b)
 
@@ -49,22 +49,26 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                number += 1
-                m.update_count(number)
 
     # Updates
 
     mouse_pos = pygame.mouse.get_pos()
 
     g.update()
+
     if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied:
         m.set_position(g.clicked_id, g)
     elif g.clicked_id is not None and g.hexagons[g.clicked_id].occupied:
+        #check if attacked unit is bandit
         attack_from = g.hexagons[g.clicked_id].neighbours[g.neighbour_direction]
-        print("Attack from : " + str(attack_from) + " to " + str(g.clicked_id))
         m.set_position(attack_from, g)
+        dmg = m.attack()
+        print("Attack from : " + str(attack_from) + " to " + str(g.clicked_id))
+        print("DMG: " + str(dmg))
+        print("Bandit HP: " + str(b.current_hp))
+        b.recieve_damage(dmg)
+        print("Bandit count: " + str(b.count))
+        print("Bandit HP: " + str(b.current_hp))
 
     if g.over_id is not None and g.hexagons[g.over_id].occupied:
         change_cursor = True
@@ -103,6 +107,8 @@ while running:
             cursor_image_tmp = pygame.transform.flip(cursor_image_tmp, True, False)
 
         screen.blit(cursor_image_tmp, mouse_dest)
+
+    g.reset()
 
     pygame.display.flip()
     clock.tick(60)
