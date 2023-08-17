@@ -10,7 +10,7 @@ Just for fun, I'm trying to recreate the battle system of Heroes 3. I'm pygame f
 - [ ] Add movement animation
 - [ ] Add mobs to teams
 - [ ] Add death sprite
-- [ ] Add evolutions
+- [ ] Add mob evolutions
 - [ ] Add heroes
 - [ ] Add more mobs
 - [ ] Add combat log
