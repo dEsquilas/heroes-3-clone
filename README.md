@@ -14,3 +14,6 @@ Just for fun, I'm trying to recreate the battle system of Heroes 3. I'm pygame f
 - [ ] Add heroes
 - [ ] Add more mobs
 - [ ] Add combat log
+- [ ] Fix render order for overlapped sprites
+- [ ] Remove killed units from tiles
+- [x] Fix movement and attack on outrange

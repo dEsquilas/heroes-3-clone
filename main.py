@@ -6,9 +6,7 @@ import os
 import pygame
 import sys
 
-x = 100
-y = 45
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
 pygame.display.init()
@@ -18,6 +16,7 @@ screen = pygame.display.set_mode((constrains.WIDTH, constrains.HEIGHT))
 pygame.display.set_caption("H3")
 
 pygame.mixer.music.load("assets/sounds/combat1.mp3")
+pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(-1)
 
 g = grid.Grid(14, 11)
@@ -60,19 +59,24 @@ while running:
 
     g.update(current_mob)
 
-    if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied and g.hexagons[g.clicked_id].can_move:
+    if (g.clicked_id is not None
+            and not g.hexagons[g.clicked_id].occupied
+            and g.hexagons[g.clicked_id].can_move):
         m.set_position(g.clicked_id, g)
-    elif g.clicked_id is not None and g.hexagons[g.clicked_id].occupied and g.hexagons[g.clicked_id].id != current_mob.current_position:
+    elif (g.clicked_id is not None
+          and g.hexagons[g.clicked_id].occupied
+          and g.hexagons[g.clicked_id].id != current_mob.current_position):
         #check if attacked unit is bandit
         attack_from = g.hexagons[g.clicked_id].neighbours[g.neighbour_direction]
-        m.set_position(attack_from, g)
-        dmg = m.attack()
-        print("Attack from : " + str(attack_from) + " to " + str(g.clicked_id))
-        print("DMG: " + str(dmg))
-        print("Bandit HP: " + str(b.current_hp))
-        b.recieve_damage(dmg)
-        print("Bandit count: " + str(b.count))
-        print("Bandit HP: " + str(b.current_hp))
+        if attack_from is not None:
+            m.set_position(attack_from, g)
+            dmg = m.attack()
+            print("Attack from : " + str(attack_from) + " to " + str(g.clicked_id))
+            print("DMG: " + str(dmg))
+            print("Bandit HP: " + str(b.current_hp))
+            b.recieve_damage(dmg)
+            print("Bandit count: " + str(b.count))
+            print("Bandit HP: " + str(b.current_hp))
 
     if g.over_id is not None and g.hexagons[g.over_id].occupied and g.hexagons[g.over_id].id != current_mob.current_position:
         change_cursor = True
