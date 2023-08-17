@@ -56,7 +56,7 @@ while running:
 
     g.update(current_mob)
 
-    if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied:
+    if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied and g.hexagons[g.clicked_id].can_move:
         m.set_position(g.clicked_id, g)
     elif g.clicked_id is not None and g.hexagons[g.clicked_id].occupied:
         #check if attacked unit is bandit
@@ -70,7 +70,7 @@ while running:
         print("Bandit count: " + str(b.count))
         print("Bandit HP: " + str(b.current_hp))
 
-    if g.over_id is not None and g.hexagons[g.over_id].occupied:
+    if g.over_id is not None and g.hexagons[g.over_id].occupied and g.hexagons[g.over_id].id != current_mob.current_position:
         change_cursor = True
 
     mobs_sprites_group.update()
