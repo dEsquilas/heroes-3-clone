@@ -12,6 +12,7 @@ class Hexagon:
         self.vertex = self.calculate_vertex()
         self.clicked = False
         self.occupied = False
+        self.can_move = False
 
         self.neighbours = {
             'top_left': None,
@@ -92,8 +93,12 @@ class Hexagon:
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if self.point_inside(mouse_x, mouse_y):
             pygame.draw.polygon(alpha_layer, self.fill_color, self.vertex)
-            screen.blit(alpha_layer, (0, 0))
-            alpha_layer.fill((0, 0, 0, 0))
+            #screen.blit(alpha_layer, (0, 0))
+            #alpha_layer.fill((0, 0, 0, 0))
+        elif self.can_move:
+            pygame.draw.polygon(alpha_layer, (255, 255, 255, 128), self.vertex)
+            #screen.blit(alpha_layer, (0, 0))
+            #alpha_layer.fill((0, 0, 0, 0))
 
         pygame.draw.polygon(screen, self.color, self.vertex, 1)
 
@@ -144,13 +149,16 @@ class Grid:
         for h in self.hexagons:
             h.draw(screen, alpha_layer)
 
-    def update(self):
+        screen.blit(alpha_layer, (0, 0))
+        alpha_layer.fill((0, 0, 0, 0))
+
+    def update(self, current_mob):
+
         if self.last_click_time and time.time() - self.last_click_time > 0.2:
             self.last_click_time = None
 
         state = pygame.mouse.get_pressed()
         mouse_position = pygame.mouse.get_pos()
-
         clicked_found = False
         self.over_id = None
 
@@ -166,6 +174,35 @@ class Grid:
         if not clicked_found:
             self.clicked_id = None
 
+        self.set_cursor_direction(mouse_position)
+
+        # check the distance for draw movement
+
+        available_to_move = self.set_neighbour_available_to_move([current_mob.current_position], current_mob.speed)
+
+        self.reset_can_move()
+
+        for current in available_to_move:
+            self.hexagons[current].can_move = True
+
+    def reset_can_move(self):
+        for h in self.hexagons:
+            h.can_move = False
+
+    def set_neighbour_available_to_move(self, available_to_move, distance):
+
+        if distance == 0:
+            return available_to_move
+
+        for current in available_to_move[:]:
+            for neigbhbour in self.hexagons[current].neighbours.values():
+                if neigbhbour is not None and neigbhbour not in available_to_move:
+                    available_to_move.append(neigbhbour)
+
+        return self.set_neighbour_available_to_move(available_to_move, distance - 1)
+
+
+    def set_cursor_direction(self, mouse_position):
         if self.over_id is not None:
 
             current_hexagon = self.hexagons[self.over_id]
