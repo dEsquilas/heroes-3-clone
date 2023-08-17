@@ -4,7 +4,7 @@ import random
 
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, image_path, position, count, direction=1):
+    def __init__(self, image_path, position, count, direction=1, attack_sound=None):
         super().__init__()
 
         self.count_distance_to_sprite = 10
@@ -22,6 +22,11 @@ class Mob(pygame.sprite.Sprite):
         self.speed = 0
         self.is_ranged = 0
         self.count = count
+
+        self.attack_sound = attack_sound
+
+        if self.attack_sound is not None:
+            self.attack_sound = pygame.mixer.Sound(attack_sound)
 
         self.sprite_image = pygame.image.load(image_path).subsurface(
             position[0], position[1], position[2], position[3]
@@ -61,6 +66,9 @@ class Mob(pygame.sprite.Sprite):
         self.is_ranged = is_ranged
 
     def attack(self):
+        if self.attack_sound is not None:
+            print("Sound")
+            self.attack_sound.play()
         current_dmg = random.randint(self.attack_min, self.attack_max) * self.count
         return current_dmg
 
@@ -109,7 +117,7 @@ class Mob(pygame.sprite.Sprite):
 
 class BlueDragon(Mob):
     def __init__(self, count=1, direction=1):
-        super().__init__("assets/dragon.png", [43, 21, 90, 111], count, direction)
+        super().__init__("assets/dragon.png", [43, 21, 90, 111], count, direction, "assets/sounds/dragon_attack.mp3")
         self.set_mob_attr(40, 50, 250, 5, False)
 
 

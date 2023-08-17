@@ -4,7 +4,13 @@ Just for fun, I'm trying to recreate the battle system of Heroes 3. I'm pygame f
 
 # To Do
 
-- [ ] Add music
+- [x] Add music
+- [ ] Add automatic sprite load for frames
 - [ ] Add attack animation
 - [ ] Add movement animation
 - [ ] Add mobs to teams
+- [ ] Add death sprite
+- [ ] Add evolutions
+- [ ] Add heroes
+- [ ] Add more mobs
+- [ ] Add combat log

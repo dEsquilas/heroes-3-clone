@@ -11,11 +11,16 @@ y = 45
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
 
 pygame.init()
+pygame.display.init()
+pygame.display.set_mode((1, 1))
+pygame.mixer.init()
 screen = pygame.display.set_mode((constrains.WIDTH, constrains.HEIGHT))
 pygame.display.set_caption("H3")
 
-g = grid.Grid(14, 11)
+pygame.mixer.music.load("assets/sounds/combat1.mp3")
+pygame.mixer.music.play(-1)
 
+g = grid.Grid(14, 11)
 
 mobs_sprites_group = pygame.sprite.Group()
 m = mobs.BlueDragon(5)
@@ -29,7 +34,6 @@ scenario_img = pygame.image.load("assets/scenarios/CmBkGrMt.png").convert()
 scenario = pygame.transform.scale(scenario_img, (constrains.WIDTH, constrains.HEIGHT))
 
 alpha_layer = pygame.Surface((constrains.WIDTH, constrains.HEIGHT), pygame.SRCALPHA)
-
 
 cursor_image = pygame.image.load("assets/cursor.png").subsurface(
         250, 0, 40, 40
