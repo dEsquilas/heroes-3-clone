@@ -12,6 +12,52 @@ class Hexagon:
         self.clicked = False
         self.occupied = False
 
+        self.neighbours = {
+            'top_left': None,
+            'top_right': None,
+            'left': None,
+            'right': None,
+            'bottom_left': None,
+            'bottom_right': None
+        }
+
+        self.font = pygame.font.Font("assets/fonts/Roboto-Regular.ttf", 11)
+
+
+    def set_neighbours(self, grid, row, col):
+
+        if row % 2 == 0:
+            distance = grid.width - 1
+
+            if row != 0:
+                self.neighbours['top_left'] = self.id - distance - 1
+                self.neighbours['top_right'] = self.id - distance
+
+            if row != grid.height - 1:
+                self.neighbours['bottom_left'] = self.id + distance
+                self.neighbours['bottom_right'] = self.id + distance + 1
+
+
+
+        else:
+            distance = grid.width
+
+            if col != 0:
+                self.neighbours['top_left'] = self.id - distance
+                self.neighbours['bottom_left'] = self.id + distance - 1
+            if col != distance - 1:
+                self.neighbours['top_right'] = self.id - distance + 1
+                self.neighbours['bottom_right'] = self.id + distance
+
+        if col != 0:
+            self.neighbours['left'] = self.id - 1
+
+        if col != distance - 1:
+            self.neighbours['right'] = self.id + 1
+
+
+
+
     def calculate_vertex(self):
         vertex = []
         # 54, 26
@@ -56,6 +102,12 @@ class Hexagon:
             screen.blit(alpha_layer, (0, 0))
             alpha_layer.fill((0, 0, 0, 0))
 
+
+        text_surface = self.font.render(str(self.id), True, (255, 255, 255))
+        center = (self.origin[0] + constrains.HW / 2, self.origin[1] + constrains.HH / 2)
+        text_rect = text_surface.get_rect(center=center)
+        screen.blit(text_surface, text_rect)
+
         pygame.draw.polygon(screen, self.color, self.vertex, 1)
 
 
@@ -97,6 +149,7 @@ class Grid:
 
             for j in range(0, limit - 1):
                 self.hexagons.append(Hexagon((current_px + j * constrains.HW, current_py), current_id))
+                self.hexagons[current_id].set_neighbours(self, i, j)
                 current_id += 1
 
     def draw(self, screen, alpha_layer):
