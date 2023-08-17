@@ -151,15 +151,13 @@ class Grid:
         state = pygame.mouse.get_pressed()
         mouse_position = pygame.mouse.get_pos()
 
-        if not self.last_click_time and state[0]:
-            self.last_click_time = time.time()
-
         clicked_found = False
         self.over_id = None
 
         for h in self.hexagons:
             if h.point_inside(mouse_position[0], mouse_position[1]):
-                if state[0]:
+                if state[0] and self.last_click_time is None:
+                    self.last_click_time = time.time()
                     self.clicked_id = h.id
                     clicked_found = True
                 else:
@@ -204,3 +202,5 @@ class Grid:
                 else:
                     self.neighbour_direction = 'bottom_right'
 
+    def reset(self):
+        self.clicked_id = None
