@@ -19,7 +19,7 @@ g = grid.Grid(14, 11)
 
 mobs_sprites_group = pygame.sprite.Group()
 m = mobs.BlueDragon(5)
-m.set_position(0, g)
+m.set_position(40, g)
 mobs_sprites_group.add(m)
 b = mobs.Bandit(300, -1)
 b.set_position(12, g)
@@ -37,7 +37,7 @@ cursor_image = pygame.image.load("assets/cursor.png").subsurface(
 pygame.mouse.set_visible(False)
 
 number = 10
-
+current_mob = m
 running = True
 clock = pygame.time.Clock()
 
@@ -54,7 +54,7 @@ while running:
 
     mouse_pos = pygame.mouse.get_pos()
 
-    g.update()
+    g.update(current_mob)
 
     if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied:
         m.set_position(g.clicked_id, g)

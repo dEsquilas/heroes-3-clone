@@ -110,7 +110,7 @@ class Mob(pygame.sprite.Sprite):
 class BlueDragon(Mob):
     def __init__(self, count=1, direction=1):
         super().__init__("assets/dragon.png", [43, 21, 90, 111], count, direction)
-        self.set_mob_attr(40, 50, 250, 10, False)
+        self.set_mob_attr(40, 50, 250, 5, False)
 
 
 class Bandit(Mob):
