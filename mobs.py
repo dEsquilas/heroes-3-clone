@@ -67,7 +67,6 @@ class Mob(pygame.sprite.Sprite):
 
     def attack(self):
         if self.attack_sound is not None:
-            print("Sound")
             self.attack_sound.play()
         current_dmg = random.randint(self.attack_min, self.attack_max) * self.count
         return current_dmg

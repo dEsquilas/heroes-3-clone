@@ -73,7 +73,6 @@ while running:
             dmg = m.attack()
             print("Attack from : " + str(attack_from) + " to " + str(g.clicked_id))
             print("DMG: " + str(dmg))
-            print("Bandit HP: " + str(b.current_hp))
             b.recieve_damage(dmg)
             print("Bandit count: " + str(b.count))
             print("Bandit HP: " + str(b.current_hp))
