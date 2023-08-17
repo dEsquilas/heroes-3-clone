@@ -61,6 +61,10 @@ while running:
     g.update()
     if g.clicked_id is not None and not g.hexagons[g.clicked_id].occupied:
         m.set_position(g.clicked_id, g)
+    elif g.clicked_id is not None and g.hexagons[g.clicked_id].occupied:
+        attack_from = g.hexagons[g.clicked_id].neighbours[g.neighbour_direction]
+        print("Attack from : " + str(attack_from) + " to " + str(g.clicked_id))
+        m.set_position(attack_from, g)
 
     if g.over_id is not None and g.hexagons[g.over_id].occupied:
         change_cursor = True
@@ -81,13 +85,13 @@ while running:
 
         mouse_dest = (mouse_pos[0] - 30, mouse_pos[1] - 10)
 
-        if g.cursor_direction == -1 and g.cursor_position == 0:
+        if g.neighbour_direction == 'top_left':
             mouse_dest = (mouse_pos[0] - 40, mouse_pos[1] - 30)
-        elif g.cursor_direction == 1 and g.cursor_position == 2:
+        elif g.neighbour_direction == 'bottom_right':
             mouse_dest = (mouse_pos[0] - 20, mouse_pos[1] - 10)
-        elif g.cursor_direction == 1 and g.cursor_position == 1:
+        elif g.neighbour_direction == 'right':
             mouse_dest = (mouse_pos[0] - 10, mouse_pos[1] - 10)
-        elif g.cursor_direction == 1 and g.cursor_position == 0:
+        elif g.neighbour_direction == 'top_right':
             mouse_dest = (mouse_pos[0] - 10, mouse_pos[1] - 30)
 
         if g.cursor_position == 0:
