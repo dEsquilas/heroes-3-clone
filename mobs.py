@@ -3,7 +3,7 @@ import pygame
 
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, image_path, position, direction=1):
+    def __init__(self, image_path, position, count, direction=1):
         super().__init__()
 
         self.count_distance_to_sprite = 10
@@ -11,6 +11,16 @@ class Mob(pygame.sprite.Sprite):
         self.count_height = 15
         self.direction = direction
         self.current_position = -1
+
+        #mob attributes
+
+        self.attack_min = 0
+        self.attack_max = 0
+        self.hp = 0
+        self.current_hp = 0
+        self.speed = 0
+        self.is_ranged = 0
+        self.count = count
 
         self.sprite_image = pygame.image.load(image_path).subsurface(
             position[0], position[1], position[2], position[3]
@@ -33,13 +43,21 @@ class Mob(pygame.sprite.Sprite):
         self.count_offset = (count_offset_x, count_offset_y)
 
         self.font = pygame.font.Font("assets/fonts/Roboto-Regular.ttf", 11)
-        self.count_surface = self.font.render("10", True, (255, 255, 255))
+        self.count_surface = self.font.render(self.count, True, (255, 255, 255))
         self.count_position = (count_offset_x + self.count_width / 2, count_offset_y + self.count_height / 2 - 1)
         self.count_rect = self.count_surface.get_rect(center=self.count_position)
 
         self.update_count(10)
 
         self.rect = self.image.get_rect()
+
+    def set_mob_attr(self, attack_min, attack_max, hp, speed, is_ranged):
+        self.attack_min = attack_min
+        self.attack_max = attack_max
+        self.hp = hp
+        self.current_hp = hp * self.count
+        self.speed = speed
+        self.is_ranged = is_ranged
 
     def update_count(self, number):
         pygame.draw.rect(self.image, (80, 50, 190),
@@ -75,8 +93,10 @@ class Mob(pygame.sprite.Sprite):
 class BlueDragon(Mob):
     def __init__(self, direction=1):
         super().__init__("assets/dragon.png", [43, 21, 90, 111], direction)
+        self.set_mob_attr(40, 50, 250, 10, False)
 
 
 class Bandit(Mob):
     def __init__(self, direction=1):
         super().__init__("assets/bandit.png", [27, 32, 46, 97], direction)
+        self.set_mob_attr(5, 5, 10, 10, 0)
