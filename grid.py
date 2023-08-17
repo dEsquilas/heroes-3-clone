@@ -93,12 +93,8 @@ class Hexagon:
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if self.point_inside(mouse_x, mouse_y):
             pygame.draw.polygon(alpha_layer, self.fill_color, self.vertex)
-            #screen.blit(alpha_layer, (0, 0))
-            #alpha_layer.fill((0, 0, 0, 0))
         elif self.can_move:
-            pygame.draw.polygon(alpha_layer, (255, 255, 255, 128), self.vertex)
-            #screen.blit(alpha_layer, (0, 0))
-            #alpha_layer.fill((0, 0, 0, 0))
+            pygame.draw.polygon(alpha_layer, (180, 180, 180, 128), self.vertex)
 
         pygame.draw.polygon(screen, self.color, self.vertex, 1)
 
